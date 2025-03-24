@@ -3,12 +3,8 @@ keyboard = "en-us"
 country = "us"
 fqdn = "pve1.local"
 mailto = "mail@exsample.local"
-timezone = "Asia/Tokyo"
-root_password = "Admin1!"
-
-# root_ssh_keys = [
-#     "ssh-ed25519 AAAA..."
-# ]
+timezone = "Europe/Moscow"
+root_password = "password"
 
 [network]
 source = "from-answer"
