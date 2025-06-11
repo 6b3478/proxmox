@@ -8,15 +8,13 @@ root_password = "password"
 
 [network]
 source = "from-answer"
-cidr = "192.0.2.100/24"
-dns = "192.0.2.1"
-gateway = "192.0.2.1"
+cidr = "192.168.8.100/24"
+dns = "192.168.8.1"
+gateway = "192.168.8.1"
 
-# filter.ID_NET_NAME_MAC = "*00005E0053f0"
 filter.ID_NET_NAME = "eno1"
 
 [disk-setup]
 filesystem = "ext4"
-lvm.swapsize = 0
+lvm.swapsize = 32768
 lvm.maxvz = 0
-disk_list = ['sda']
