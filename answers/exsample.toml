@@ -18,3 +18,5 @@ filter.ID_NET_NAME = "eno1"
 filesystem = "ext4"
 lvm.swapsize = 32768
 lvm.maxvz = 0
+
+disk_list = ['sda']
