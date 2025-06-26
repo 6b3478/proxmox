@@ -72,7 +72,7 @@ jobs:
         uses: naa0yama/proxmox-auto-install-iso@v1
         with:
           pve_version: ${{ env.PROXMOX_VERSION }}
-          pve_sha256: ${{ env.PROXMOX_ISO_SHA }}
+          pve_sha256: ${{ env.PROXMOX_ISO_SHA == 'skip' && '' || env.PROXMOX_ISO_SHA }}
 
       - name: Cleanup pre-releases
         uses: actions/github-script@v7.0.1
