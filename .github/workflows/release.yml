@@ -7,15 +7,15 @@ on:
   workflow_dispatch:
     inputs:
       pve_version:
-        required: true
-        default: "8.3-1"
-        description: Proxmox VE version
+        required: false
+        default: ""
+        description: Proxmox VE version (оставьте пустым для автоматического определения)
         type: string
 
       pve_sha256:
-        required: true
-        default: "b5c2d10d6492d2d763e648bc8562d0f77a90c39fac3a664e676e795735198b45"
-        description: Proxmox VE SHA256
+        required: false
+        default: ""
+        description: Proxmox VE SHA256 (оставьте пустым для пропуска проверки)
         type: string
 
 jobs:
@@ -28,8 +28,8 @@ jobs:
       packages: write
     env:
       COMMIT_SHORT_SHA: null
-      PROXMOX_VERSION: ${{ inputs.pve_version }}
-      PROXMOX_ISO_SHA: ${{ inputs.pve_sha256 }}
+      PROXMOX_VERSION: ${{ inputs.pve_version || '' }}
+      PROXMOX_ISO_SHA: ${{ inputs.pve_sha256 || '' }}
 
     steps:
       - name: Checkout from repository
@@ -42,8 +42,20 @@ jobs:
           calculatedSha=$(git rev-parse --short ${{ github.sha }})
           echo "COMMIT_SHORT_SHA=$calculatedSha" >> $GITHUB_ENV
 
+      - name: Auto-detect Proxmox version if not provided
+        run: |+
+          set -eux
+
+          if [ -z "${PROXMOX_VERSION}" ]; then
+            echo "Автоматическое определение последней версии Proxmox VE..."
+            DETECTED_VERSION=$(curl -s https://enterprise.proxmox.com/iso/ | grep -oP 'proxmox-ve_\K[0-9]+\.[0-9]+-[0-9]+' | sort -V | tail -1)
+            echo "Найдена версия: ${DETECTED_VERSION}"
+            echo "PROXMOX_VERSION=${DETECTED_VERSION}" >> $GITHUB_ENV
+          else
+            echo "Используется указанная версия: ${PROXMOX_VERSION}"
+          fi
+
       - name: Create Directory
-        working-directory: dist
         run: |+
           set -eux
 
